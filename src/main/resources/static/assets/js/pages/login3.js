@@ -19,11 +19,10 @@ $(document).ready(function() {
     $("#checkCode").val("");
 
     //设置验证码倒计时显示值
-    $('#flusCode').html("注意("+curCount +")秒后刷新验证码");
+   // $('#flusCode').html("注意("+curCount +")秒后刷新验证码");
 
     //启动定时器
-    //setInterval("SetRemainTimes()",1000);
-    window.setInterval(SetRemainTimes, 1000); //启动定时器
+    //window.setInterval(SetRemainTimes, 1000); //启动定时器
 
     var submitFlag=1; //登录校验标志
     var checkAccountFlag=1;//账号校验标志
@@ -73,6 +72,7 @@ $(document).ready(function() {
         var password=$('#password').val();//获取密码
         var checkCode=$('#checkCode').val();//获取输入验证码
 
+/*
         if(isNull(account)&&isNull(password)&&isNull(checkCode)){
             accountP.append("<span class='msg onError' >" + errorMsg1 + "</span>");
             passowrdP.append("<span class='msg onError' >" + errorMsg2 + "</span>");
@@ -99,15 +99,33 @@ $(document).ready(function() {
         }else{
              checkCodeFunction(checkCode);
          }
+*/
+
+         //执行后台校验
+
+        $.ajax({
+            type:"POST",
+            url:"/bgmSys/main",
+            datatype:"JSON",
+            contentType: "application/json",
+            data:JSON.stringify({"account":account,"password":password,"checkCode":checkCode}),
+            success:function (msg) {
+               alert("获取的数据是："+msg.code+"=="+msg.returnMsg);
+            }
+        })
 
 
-
-         if(submitFlag==1&&checkAccountFlag==1&&checkCodeFlag==1){
+/*         if(submitFlag==1&&checkAccountFlag==1&&checkCodeFlag==1){
              accountP.find(".msg").remove();
              passowrdP.find(".msg").remove();
              checkCodeP.find(".msg").remove();
              $('#loginForm').submit();
-         }
+         }*/
+
+        //$('#loginForm').submit();
+
+       // $('#loginForm').submit();
+
 
     });
     //--------登录按钮点击校验-------------------------【end】-------------------------
@@ -141,7 +159,7 @@ $(document).ready(function() {
         $('.verifyCode').attr("src",src);                  //jQuery写法采用class选择器，jQuery的attr()函数，向Servlet发出请求
     }
     //设置定时器方法
-    function SetRemainTimes() {
+/*    function SetRemainTimes() {
         //alert("当前的数值是1:"+curCount);
         if(curCount == 1) {
             curCount=60;
@@ -150,7 +168,7 @@ $(document).ready(function() {
             curCount--;
             $('#flusCode').html("注意("+curCount +")秒后刷新验证码");
         }
-    }
+    }*/
     //校验账号是否存在
     function checkAccountFunction(str) {
         $.ajax({
