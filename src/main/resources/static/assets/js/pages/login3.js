@@ -72,59 +72,51 @@ $(document).ready(function() {
         var password=$('#password').val();//获取密码
         var checkCode=$('#checkCode').val();//获取输入验证码
 
-/*
-        if(isNull(account)&&isNull(password)&&isNull(checkCode)){
-            accountP.append("<span class='msg onError' >" + errorMsg1 + "</span>");
-            passowrdP.append("<span class='msg onError' >" + errorMsg2 + "</span>");
-            checkCodeP.append("<span class='msg onError' >" + errorMsg3 + "</span>");
-            submitFlag=0;
-        }else{
-            submitFlag=1;
-        }
-        if(isNull(account)){
-            accountP.append("<span class='msg onError' >" + errorMsg1 + "</span>");
-            checkAccountFlag=0;
-        }else{
-            checkAccountFunction(account);
-        }
-
-         if(isNull(password)){
-            passowrdP.append("<span class='msg onError' >" + errorMsg2 + "</span>");
-            submitFlag=0;
-        }
-
-         if(isNull(checkCode)){
-            checkCodeP.append("<span class='msg onError' >" + errorMsg3 + "</span>");
-            checkCodeFlag=0;
-        }else{
-             checkCodeFunction(checkCode);
-         }
-*/
-
          //执行后台校验
 
         $.ajax({
             type:"POST",
-            url:"/bgmSys/main",
+            url:"/bgmSys/loginCheck",
             datatype:"JSON",
             contentType: "application/json",
             data:JSON.stringify({"account":account,"password":password,"checkCode":checkCode}),
             success:function (msg) {
-               alert("获取的数据是："+msg.code+"=="+msg.returnMsg);
+              // alert("获取的数据是："+msg.code+"=="+msg.returnMsg);
+                var code1=msg.code1;
+                var code2=msg.code2;
+                var code3=msg.code3;
+                var code4=msg.code4;
+                var code5=msg.code5;
+                var code6=msg.code6;
+
+                var returnMsg2=msg.returnMsg2;
+                var returnMsg3=msg.returnMsg3;
+                var returnMsg4=msg.returnMsg4;
+                var returnMsg5=msg.returnMsg5;
+                var returnMsg6=msg.returnMsg6;
+
+
+                if (!isNull(code2)){
+                    accountP.append("<span class='msg onError' >" + returnMsg2 + "</span>");
+                }
+                if (!isNull(code3)){
+                    passowrdP.append("<span class='msg onError' >" + returnMsg3 + "</span>");
+                }
+                if (!isNull(code4)){
+                    checkCodeP.append("<span class='msg onError' >" + returnMsg4 + "</span>");
+                }
+                if (!isNull(code5)){
+                    checkCodeP.append("<span class='msg onError' >" + returnMsg5 + "</span>");
+                }
+                if (!isNull(code6)){
+                    checkCodeP.append("<span class='msg onError' >" + returnMsg6 + "</span>");
+                }
+
+                if(!isNull(code1)){
+                    $('#loginForm').submit();  //执行表单提交
+                }
             }
         })
-
-
-/*         if(submitFlag==1&&checkAccountFlag==1&&checkCodeFlag==1){
-             accountP.find(".msg").remove();
-             passowrdP.find(".msg").remove();
-             checkCodeP.find(".msg").remove();
-             $('#loginForm').submit();
-         }*/
-
-        //$('#loginForm').submit();
-
-       // $('#loginForm').submit();
 
 
     });
@@ -145,7 +137,7 @@ $(document).ready(function() {
     //--------------------------------验证码获取----------------【end】--------------------
     //判空方法
     function isNull(str) {
-        if ( str == ""||str.length==0 ) return true;
+        if ( str == ""||str==null) return true;
         var regu = "^[ ]+$";
         var re = new RegExp(regu);
         return re.test(str);
